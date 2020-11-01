@@ -6,7 +6,7 @@
 /*   By: abobas <abobas@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/01 14:47:26 by abobas        #+#    #+#                 */
-/*   Updated: 2020/11/01 17:06:24 by abobas        ########   odam.nl         */
+/*   Updated: 2020/11/01 19:53:47 by abobas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,7 @@ string *Client::receiveResponse()
 				content_size = isContent(response, content);
 				if (content)
 				{
+					response->reserve(response->size() + content_size);
 					log->logEntry("response has content");
 					log->logEntry("content size", content_size);
 				}
@@ -225,7 +226,8 @@ void Client::isChunked(string *response, bool &chunked)
 
 bool Client::endOfChunked(string *response)
 {
-	if (response->find("0\r\n\r\n") != string::npos)
+	std::string end = response->substr(response->size() - 7);
+	if (end.find("0\r\n\r\n") != std::string::npos)
 		return true;
 	return false;
 }

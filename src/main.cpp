@@ -6,7 +6,7 @@
 /*   By: abobas <abobas@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/01 14:38:50 by abobas        #+#    #+#                 */
-/*   Updated: 2020/11/01 17:12:37 by abobas        ########   odam.nl         */
+/*   Updated: 2020/11/01 18:06:17 by abobas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int main(int ac, char **av)
 		client.transmitRequest(av[1]);
 		log->logEntry("transmitted request to server");
 		response = client.receiveResponse();
-		//log->logBlock(*response);
+		log->logEntry("response received from server");
 		delete response;
 	}
 	catch (const char *e)
