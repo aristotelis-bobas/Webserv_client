@@ -5,10 +5,10 @@ A simple HTTP/1.1 client written in C++. <br>
 Written for stresstesting CGI features of the webserv project of the 42 Network. <br>
 
 Hardcoded settings are:
-- will establish connection with localhost:80
-- will `POST localhost/testing.pl`
-- request body will be the content of the file provided as 1st argument to the progam
-- uses chunked transfer-encoding for transmitting the file's content
+- establishes connection with localhost:80
+- request method and URI are `POST localhost/testing.pl`
+- request body will be the content of the file provided as 1st argument to the executable
+- uses chunked transfer-encoding for transmitting the request's body
 - will recognize chunked responses from your server
 - writes logs to logs/log.txt
 
