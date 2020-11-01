@@ -9,7 +9,6 @@ Standard settings are:
 - will transmit the content of the file provided as 1st argument to the progam
 - uses chunked transfer-encoding for transmitting the file's content
 - will recognize chunked responses from your server
+- writes logs to logs/log.txt
 
 These can be changed inside of the Client.cpp file if needed.
-Logs are written to logs/log.txt file.
-
