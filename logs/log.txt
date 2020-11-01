@@ -1,0 +1,5 @@
+17:12:42 - connected to server
+17:12:42 - server is ready to receive request
+17:12:42 - transmitted request to server
+17:12:42 - response is chunked
+17:12:43 - decoded chunked content size 1015
