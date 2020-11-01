@@ -2,7 +2,7 @@
 
 A simple HTTP/1.1 client written in C++. <br>
 
-Written for the purpose of testing features of the webserv project of Codam (42 Network). <br>
+Written for testing features of the webserv project of Codam (42 Network). <br>
 
 Standard settings are:
 - will establish connection with localhost:80
