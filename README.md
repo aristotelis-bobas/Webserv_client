@@ -2,7 +2,7 @@
 
 A simple HTTP/1.1 client written in C++. <br>
 
-Written for stresstesting CGI features of the webserv project of the 42 Network. <br>
+Written for stress testing CGI features of the webserv project of the 42 Network. <br>
 
 Hardcoded settings are:
 - establishes connection with localhost:80
