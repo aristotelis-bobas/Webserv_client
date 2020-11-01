@@ -2,6 +2,7 @@
 
 A simple HTTP/1.1 client written in C++. <br>
 
+When `curl` is just not enough.
 Written for stress testing CGI features of the Webserv project of Codam / 42 Network. <br>
 Can easily be altered for other tests.
 
