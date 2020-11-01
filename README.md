@@ -11,4 +11,5 @@ Standard settings are:
 - will recognize chunked responses from your server
 
 These can be changed inside of the Client.cpp file if needed.
+Logs are written to logs/log.txt file.
 
