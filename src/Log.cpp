@@ -6,7 +6,7 @@
 /*   By: abobas <abobas@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/28 16:29:45 by abobas        #+#    #+#                 */
-/*   Updated: 2020/11/01 17:11:29 by abobas        ########   odam.nl         */
+/*   Updated: 2020/11/02 01:48:28 by abobas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void Log::logBlock(string &message)
 
 void Log::logError(const char *error)
 {
-	file << "Error: " << getTime() << error << ": " << strerror(errno) << endl;
+	file << getTime() << "Error: " << error << ": " << strerror(errno) << endl;
 }
 
 string Log::getTime()
