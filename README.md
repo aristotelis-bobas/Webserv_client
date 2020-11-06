@@ -3,15 +3,9 @@
 A simple HTTP/1.1 client written in C++. <br>
 
 When `curl` is just not enough. <br>
-Written for stress testing CGI features of the Webserv project of Codam / 42 Network. <br>
-Can easily be altered for other tests.
+Written for stress testing features of the Webserv project of Codam / 42 Network. <br>
 
-Hardcoded settings are:
-- establishes connection with localhost:80
-- request method and URI are `POST localhost/testing.pl`
-- request body will be the content of the file provided as 1st argument to the executable
-- uses chunked transfer-encoding for transmitting the request's body
-- will recognize chunked responses from your server
-- writes logs to logs/log.txt
+- Is able to send and receive chunked requests / responses
+- Logger object for debugging
 
-These can be changed inside of the Client.cpp file. <br>
+Can easily be altered for other tests. <br>

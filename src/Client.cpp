@@ -6,7 +6,7 @@
 /*   By: abobas <abobas@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/01 14:47:26 by abobas        #+#    #+#                 */
-/*   Updated: 2020/11/06 01:09:41 by abobas        ########   odam.nl         */
+/*   Updated: 2020/11/06 01:38:55 by abobas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void Client::fileLoop(const char *path)
 	char buf[IO_SIZE + 1];
 	int fd;
 	int ret;
-	
+
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		throw "open()";
@@ -89,15 +89,12 @@ void Client::sendUploadHeader(const char *path)
 	ostringstream oss;
 	std::string content_length("Content-Length: ");
 	struct stat file;
-	
+
 	if (stat(path, &file) < 0)
-	{
-		cerr << "stat failed" << endl;
-		exit(1);
-	}
+		throw "stat()";
 	content_length.append(to_string(file.st_size));
 	content_length.append(CRLF);
-	
+
 	oss << status << host << content_length << user_agent << CRLF;
 	sendSocket(oss.str().c_str());
 }
@@ -120,7 +117,7 @@ void Client::chunkedLoop(const char *path)
 	char buf[IO_SIZE + 1];
 	int fd;
 	int ret;
-	
+
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		throw "open()";
@@ -144,7 +141,7 @@ void Client::sendChunk(const char *buffer, int size)
 {
 	ostringstream oss;
 	std::string output;
-	
+
 	oss << hex << size;
 	output = oss.str() + CRLF;
 	sendSocket(output.c_str());
@@ -155,7 +152,7 @@ void Client::sendChunk(const char *buffer, int size)
 void Client::sendChunkEnd()
 {
 	ostringstream oss;
-	
+
 	oss << "0" << CRLF << CRLF;
 	sendSocket(oss.str().c_str());
 }
@@ -163,7 +160,7 @@ void Client::sendChunkEnd()
 void Client::sendChunkHeader()
 {
 	ostringstream oss;
-	
+
 	oss << status << host << encoding << CRLF;
 	sendSocket(oss.str().c_str());
 }
@@ -332,5 +329,3 @@ bool Client::endOfContent(string *response, int &content_size)
 		return true;
 	return false;
 }
-
-
