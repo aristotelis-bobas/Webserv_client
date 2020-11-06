@@ -6,7 +6,7 @@
 /*   By: abobas <abobas@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/01 14:47:24 by abobas        #+#    #+#                 */
-/*   Updated: 2020/11/01 17:04:36 by abobas        ########   odam.nl         */
+/*   Updated: 2020/11/06 00:54:30 by abobas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/select.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <arpa/inet.h>
 #include <string.h>
 #include <fcntl.h>
@@ -32,8 +34,13 @@ public:
 	Client();
 
 	void connectClient();
-	void transmitRequest(const char *path);
 	string *receiveResponse();
+
+	/// FILE UPLOAD ///
+	void uploadFile(const char *path);
+
+	//// CHUNKED ENCODING ///
+	void transmitFileChunked(const char *path);
 
 private:
 	Log *log;
@@ -41,6 +48,12 @@ private:
 
 	// write operations
 	void sendSocket(const char *data);
+
+	/// FILE UPLOAD //
+	void sendUploadHeader(const char *path);
+	void fileLoop(const char *path);
+
+	/// CHUNKED ENCODING //
 	void sendChunk(const char *data, int size);
 	void chunkedLoop(const char *path);
 	void sendChunkHeader();

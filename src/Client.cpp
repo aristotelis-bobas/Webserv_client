@@ -6,7 +6,7 @@
 /*   By: abobas <abobas@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/01 14:47:26 by abobas        #+#    #+#                 */
-/*   Updated: 2020/11/01 19:53:47 by abobas        ########   odam.nl         */
+/*   Updated: 2020/11/06 01:09:41 by abobas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 #define IO_SIZE 2048
 
 static string CRLF = "\r\n";
-static string status = "POST /testing.pl HTTP/1.1" + CRLF;
+static string status = "PUT /text.txt HTTP/1.1" + CRLF;
 static string host = "Host: localhost" + CRLF;
 static string encoding = "Transfer-Encoding: chunked" + CRLF;
+static string user_agent = "User-Agent: Webserv_client 1.1" + CRLF;
 
 Client::Client()
 {
@@ -46,7 +47,62 @@ void Client::connectClient()
 		throw "connect()";
 }
 
-void Client::transmitRequest(const char *path)
+void Client::uploadFile(const char *path)
+{
+	fd_set write_set;
+
+	FD_ZERO(&write_set);
+	FD_SET(client_socket, &write_set);
+	select(client_socket + 1, NULL, &write_set, NULL, NULL);
+	log->logEntry("server is ready to receive request");
+	sendUploadHeader(path);
+	fileLoop(path);
+}
+
+void Client::fileLoop(const char *path)
+{
+	char buf[IO_SIZE + 1];
+	int fd;
+	int ret;
+	
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		throw "open()";
+	while (true)
+	{
+		ret = read(fd, buf, IO_SIZE);
+		if (ret < 0)
+		{
+			close(fd);
+			throw "read()";
+		}
+		buf[ret] = '\0';
+		sendSocket(buf);
+		if (ret < IO_SIZE)
+			break;
+	}
+	close(fd);
+}
+
+void Client::sendUploadHeader(const char *path)
+{
+	ostringstream oss;
+	std::string content_length("Content-Length: ");
+	struct stat file;
+	
+	if (stat(path, &file) < 0)
+	{
+		cerr << "stat failed" << endl;
+		exit(1);
+	}
+	content_length.append(to_string(file.st_size));
+	content_length.append(CRLF);
+	
+	oss << status << host << content_length << user_agent << CRLF;
+	sendSocket(oss.str().c_str());
+}
+
+void Client::transmitFileChunked(const char *path)
 {
 	fd_set write_set;
 
@@ -86,18 +142,21 @@ void Client::chunkedLoop(const char *path)
 
 void Client::sendChunk(const char *buffer, int size)
 {
-	ostringstream oss_1;
+	ostringstream oss;
+	std::string output;
 	
-	oss_1 << hex << size;
-	sendSocket(oss_1.str().c_str());
+	oss << hex << size;
+	output = oss.str() + CRLF;
+	sendSocket(output.c_str());
 	sendSocket(buffer);
+	sendSocket(CRLF.c_str());
 }
 
 void Client::sendChunkEnd()
 {
 	ostringstream oss;
 	
-	oss << "0" << CRLF;
+	oss << "0" << CRLF << CRLF;
 	sendSocket(oss.str().c_str());
 }
 
@@ -105,15 +164,13 @@ void Client::sendChunkHeader()
 {
 	ostringstream oss;
 	
-	oss << status << host << encoding;
+	oss << status << host << encoding << CRLF;
 	sendSocket(oss.str().c_str());
 }
 
 void Client::sendSocket(const char *data)
 {
 	if (send(client_socket, data, strlen(data), MSG_NOSIGNAL) < 0)
-		throw "send()";
-	if (send(client_socket, CRLF.c_str(), 2, MSG_NOSIGNAL) < 0)
 		throw "send()";
 }
 
