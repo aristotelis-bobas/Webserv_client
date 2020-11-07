@@ -6,7 +6,7 @@
 /*   By: abobas <abobas@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/01 14:47:24 by abobas        #+#    #+#                 */
-/*   Updated: 2020/11/06 00:54:30 by abobas        ########   odam.nl         */
+/*   Updated: 2020/11/07 21:43:39 by abobas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ public:
 	void connectClient();
 	string *receiveResponse();
 
-	/// FILE UPLOAD ///
-	void uploadFile(const char *path);
+	/// REGULAR (CONTENT SIZE) ///
+	void transmitFile(const char *path);
 
 	//// CHUNKED ENCODING ///
 	void transmitFileChunked(const char *path);

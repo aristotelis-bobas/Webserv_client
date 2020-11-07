@@ -6,7 +6,7 @@
 #    By: abobas <abobas@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/11/01 15:35:01 by abobas        #+#    #+#                  #
-#    Updated: 2020/11/01 17:18:13 by abobas        ########   odam.nl          #
+#    Updated: 2020/11/07 21:44:25 by abobas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,9 +22,7 @@ INCLUDE :=		$(INCLUDE:%=$(INCLUDE_DIR)%)
 
 NAME = 			client
 
-FLAGS =			-Wall -Werror -Wextra -std=c++17
-
-C =				gcc
+FLAGS =			-Wall -Werror -Wextra -std=c++11
 
 all: 			$(NAME)
 
@@ -34,10 +32,10 @@ $(NAME):		$(SRC)
 run:
 				sudo ./client test_file
 
-clean:
-				rm -rf *.o
+chunked:
+				sudo ./client test_file chunked
 
-fclean:			clean
+clean:
 				rm -rf $(NAME)
 
-re:				fclean all
+re:				clean all

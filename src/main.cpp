@@ -6,7 +6,7 @@
 /*   By: abobas <abobas@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/01 14:38:50 by abobas        #+#    #+#                 */
-/*   Updated: 2020/11/06 00:59:37 by abobas        ########   odam.nl         */
+/*   Updated: 2020/11/07 21:45:02 by abobas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int main(int ac, char **av)
 	Log *log = Log::getInstance();
 	Client client = Client();
 	
-	if (ac != 2)
+	if (ac < 2)
 	{
 		cerr << "Wrong usage: supply file as 1st argument" << endl;
 		return 1;
@@ -34,13 +34,15 @@ int main(int ac, char **av)
 	{
 		client.connectClient();
 		log->logEntry("connected to server");
-		client.uploadFile(av[1]);
+		if (ac == 3)
+		{
+			if (string(av[2]) == "chunked")
+				client.transmitFileChunked(av[1]);
+		}	
+		else
+			client.transmitFile(av[1]);
 		response = client.receiveResponse();
 		delete response;
-
-		// CGI ENCODING TESTING
-		// client.transmitFileChunked(av[1]);
-
 	}
 	catch (const char *e)
 	{

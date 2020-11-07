@@ -6,7 +6,7 @@
 /*   By: abobas <abobas@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/01 14:47:26 by abobas        #+#    #+#                 */
-/*   Updated: 2020/11/06 01:38:55 by abobas        ########   odam.nl         */
+/*   Updated: 2020/11/07 21:43:57 by abobas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #define IO_SIZE 2048
 
 static string CRLF = "\r\n";
-static string status = "PUT /text.txt HTTP/1.1" + CRLF;
+static string status = "POST /cgi-bin/test.pl HTTP/1.1" + CRLF;
 static string host = "Host: localhost" + CRLF;
 static string encoding = "Transfer-Encoding: chunked" + CRLF;
 static string user_agent = "User-Agent: Webserv_client 1.1" + CRLF;
@@ -47,7 +47,7 @@ void Client::connectClient()
 		throw "connect()";
 }
 
-void Client::uploadFile(const char *path)
+void Client::transmitFile(const char *path)
 {
 	fd_set write_set;
 
@@ -297,6 +297,10 @@ void Client::cleanBody(string *response)
 	response->clear();
 	response->append(header_part);
 	response->append(body_part);
+	log->logEntry("body size (decoded)", body_part.size());
+	log->logEntry("headers size", header_part.size());
+	log->logBlock(header_part);
+	log->logBlock(body_part);
 }
 
 void Client::decodeChunkedBody(string &body)
@@ -315,7 +319,6 @@ void Client::decodeChunkedBody(string &body)
 		body = body.substr(pos_end + 2);
 	}
 	body = decoded;
-	log->logEntry("decoded chunked content size", body.size());
 }
 
 bool Client::endOfContent(string *response, int &content_size)
